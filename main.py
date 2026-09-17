@@ -1,14 +1,16 @@
 import sys
 import os
-
-# إضافة مجلد bot إلى مسار البحث الخاص ببايثون
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'bot')))
-
 import asyncio
-from bot.bot import main as bot_main
+
+# إضافة المجلد الحالي إلى مسار بايثون ليرى كل المجلدات (middlewares, handlers وغيرها)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
+
+from bot import create_bot_and_dispatcher
+
+async def main():
+    bot, dp = await create_bot_and_dispatcher()
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(bot_main())
-    except (KeyboardInterrupt, SystemExit):
-        print("Bot stopped!")
+    asyncio.run(main())
