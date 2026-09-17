@@ -1,0 +1,60 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: telegram_earning
+      POSTGRES_USER: earning_user
+      POSTGRES_PASSWORD: earning_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  bot:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://earning_user:earning_pass@db:5432/telegram_earning
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./logs:/app/logs
+      - ./backups:/app/backups
+
+  dashboard:
+    build: .
+    command: uvicorn web.dashboard:app --host 0.0.0.0 --port 8000
+    restart: unless-stopped
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
+  backup:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    depends_on:
+      - db
+    volumes:
+      - ./scripts:/scripts
+      - ./backups:/backups
+    entrypoint: sh -c "while true; do pg_dump -h db -U earning_user telegram_earning > /backups/backup_$$(date +%F).sql; sleep 86400; done"
+    environment:
+      PGPASSWORD: earning_pass
+
+volumes:
+  pgdata:

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>لوحة الويب - منصة الربح</title>
+<style>
+*{box-sizing:border-box} body{font-family:system-ui, sans-serif; background:#f6f7fb; margin:0; padding:16px; color:#222}
+.card{background:#fff; border-radius:12px; padding:16px; margin:12px 0; box-shadow:0 2px 8px #0001}
+h1{color:#3b82f6} .bar{height:12px; background:#e5e7eb; border-radius:6px; overflow:hidden} .fill{height:100%; background:#22c55e}
+.btn{background:#3b82f6; color:#fff; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; width:100%}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+</style>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<h1>💰 منصتي</h1>
+<div class="card">
+  <div>رصيدك: <b id="balance">--</b> نقطة</div>
+  <div class="bar"><div id="fill" class="fill" style="width:0%"></div></div>
+  <small id="progressText"></small>
+</div>
+<div class="grid">
+  <div class="card">🎁 <b>مكافأة يومية</b><br><button class="btn" onclick="claim()">استلام</button></div>
+  <div class="card">🎡 <b>عجلة الحظ</b><br><button class="btn" onclick="spin()">دوران</button></div>
+</div>
+<div class="card">
+  <h3>📋 مهامي</h3>
+  <div id="tasks">جاري التحميل...</div>
+</div>
+<div class="card">
+  <h3>🏆 المتصدرون</h3>
+  <div id="leaders"></div>
+</div>
+<script>
+const tg = window.Telegram.WebApp; tg.expand();
+async function load(){
+  // In production call FastAPI with initData auth
+  // Mock data for demo
+  document.getElementById('balance').textContent = '125';
+  document.getElementById('fill').style.width = '75%';
+  document.getElementById('progressText').textContent = '75% نحو السحب (100 نقطة)';
+  document.getElementById('tasks').innerHTML = '<div>• اشترك في @channel (+10) <a href="#">فتح</a></div>';
+  document.getElementById('leaders').innerHTML = '🥇 Ahmed — 500 pts<br>🥈 Sara — 320 pts';
+}
+function claim(){ alert('تم إرسال طلب المكافأة عبر البوت @your_bot'); }
+function spin(){ alert('ادخل البوت واضغط 🎡 عجلة الحظ'); }
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+bot.db
+*.db
+logs/
+.DS_Store
+.pytest_cache/
+alembic_version/
