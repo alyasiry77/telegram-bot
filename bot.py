@@ -5,9 +5,8 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 
-# المسارات الصحيحة مباشرة بدون bot.app
 from config import settings
-from database.engine import async_session, init_db, engine
+from engine import async_session, init_db, engine
 from middlewares.throttling import ThrottlingMiddleware
 from middlewares.user import MaintenanceMiddleware
 
@@ -57,7 +56,7 @@ async def create_bot_and_dispatcher():
     dp.message.middleware(DBSessionMiddleware())
     dp.callback_query.middleware(DBSessionMiddleware())
 
-    # Routers (بدون bot.app)
+    # Routers
     from handlers import start, menu, daily, tasks, paid_tasks, withdrawal, advertiser, support, admin, verify, leaderboard, webapp, premium, rating
 
     dp.include_router(verify.router)
