@@ -1,16 +1,29 @@
+import asyncio
+import logging
 import sys
 import os
-import asyncio
 
-# إضافة المسارات لضمان رؤية جميع المجلدات
-current_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, current_dir)
-sys.path.insert(0, os.path.join(current_dir, 'bot'))
+# إضافة مسار المجلد الحالي لضمان رؤية جميع الملفات والمجلدات
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from bot.bot import main as bot_main
+from bot import create_bot_and_dispatcher, on_startup, on_shutdown, settings, logger
+
+async def main():
+    logging.basicConfig(
+        level=getattr(logging, settings.log_level.upper(), logging.INFO),
+        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    )
+    
+    bot, dp = await create_bot_and_dispatcher()
+    
+    dp.startup.register(on_startup)
+    dp.shutdown.register(on_shutdown)
+    
+    logger.info("🚀 Starting Bot Polling...")
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 if __name__ == "__main__":
     try:
-        asyncio.run(bot_main())
+        asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
-        print("Bot stopped safely.")
+        logger.info("Bot stopped!")
