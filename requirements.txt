@@ -2,4 +2,6 @@ aiogram
 pydantic-settings
 sqlalchemy
 asyncpg
+aiosqlite
 requests
+greenlet
