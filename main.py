@@ -3,12 +3,12 @@ import logging
 import sys
 import os
 
-# إضافة مسار المجلد الحالي
+# إضافة مسار المجلد الحالي لضمان رؤية جميع الملفات
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# الاستيراد من المسار الصحيح للمجلد الداخلي للمشروع
-from bot.app.loader import create_bot_and_dispatcher, on_startup, on_shutdown, logger
-from bot.app.config import settings
+# الاستيراد المباشر والصحيح من الملفات الموجودة في الجذر
+from config import settings
+from loader import create_bot_and_dispatcher, on_startup, on_shutdown, logger
 
 async def main():
     logging.basicConfig(
