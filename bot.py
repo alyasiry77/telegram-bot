@@ -18,11 +18,10 @@ async def create_bot_and_dispatcher():
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
 
-    # استيراد آمن للهاندلرز لتجنب أي خطأ مفقود
+    # استيراد الراوتر من ملف handlers.py المباشر
     try:
-        from handlers import start, menu
-        dp.include_router(start.router)
-        dp.include_router(menu.router)
+        import handlers
+        dp.include_router(handlers.router)
     except Exception as e:
         logger.warning(f"Routers load warning: {e}")
 
