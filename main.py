@@ -6,9 +6,9 @@ import os
 # إضافة مسار المجلد الحالي لضمان رؤية جميع الملفات والمجلدات
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# الاستيراد المباشر الصحيح دون الحاجة لكلمة bot
-from app.config import settings
-from app.loader import create_bot_and_dispatcher, on_startup, on_shutdown, logger
+# الاستيراد المباشر من الملفات الحالية في الجذر
+from config import settings
+from loader import create_bot_and_dispatcher, on_startup, on_shutdown, logger
 
 async def main():
     logging.basicConfig(
